@@ -1,0 +1,19 @@
+log:
+  file: STDOUT
+  level: DEBUG
+  max_age: 1000h
+  rotate: 24h
+
+http:
+  addr: :10021
+  tag: /user
+
+model:
+  enable: true
+  source: postgres
+  name: postgres
+  user: admin
+  pwd: 17f16miM1PBio0FX
+  host: 127.0.0.1
+  port: 5433
+
