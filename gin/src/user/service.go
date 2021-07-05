@@ -1,6 +1,7 @@
 package user
 
 import (
+	"gin/gin/base"
 	"github.com/jinzhu/gorm"
 	"github.com/linshenqi/sptty"
 )
@@ -17,7 +18,12 @@ func (s *Service) Init(app sptty.ISptty) error {
 
 
 	app.AddRoute("GET", "/hello", s.helloworld)
+	app.AddRoute("POST", "/add", s.addUser)
 
 
 	return nil
+}
+
+func (s *Service) ServiceName() string {
+	return base.ServiceUser
 }

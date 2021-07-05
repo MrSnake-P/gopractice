@@ -15,3 +15,9 @@ func (s *Service) getUser(id int) *base.User {
 	//fmt.Println("123")
 	return &u
 }
+
+func (s *Service) createUser(name string, age int) error {
+	u := base.User{Name: name, Age: age}
+	s.db.Create(&u)
+	return nil
+}
