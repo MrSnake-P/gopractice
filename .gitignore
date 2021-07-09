@@ -18,3 +18,7 @@
 vendor
 build
 *.orig
+
+# notes
+工作笔记*
+api*
