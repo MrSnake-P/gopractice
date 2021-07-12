@@ -53,6 +53,3 @@ db.Table("users").Select("name, age").Where("name = ?", 3).Scan(&result)
 db.Raw("SELECT name, age FROM users WHERE name = ?", 3).Scan(&result)
 ```
 
-```
-
-```
