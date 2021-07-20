@@ -2,7 +2,7 @@ package user
 
 import (
 	"fmt"
-	"gin/gin/base"
+	"gin/base"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )

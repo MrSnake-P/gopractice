@@ -1,8 +1,8 @@
 package main
 
 import (
-	"gin/sptty/src/user"
 	"github.com/linshenqi/sptty"
+	"sptty/src/user"
 )
 
 func main() {
