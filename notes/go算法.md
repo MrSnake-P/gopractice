@@ -114,5 +114,129 @@ func getIntersectionNode(headA, headB *ListNode) *ListNode {
 
 
 
+# 迭代
+
 ## [206. 反转链表](https://leetcode-cn.com/problems/reverse-linked-list/)
+
+假设链表为 1→2→3→∅，我们想要把它改成∅←1←2←3。
+
+在遍历链表时，将当前节点的 next 指针改为指向前一个节点。由于节点没有引用其前一个节点，因此必须事先存储其前一个节点。在更改引用之前，还需要存储后一个节点。最后返回新的头引用。
+
+```go
+func reverseList(head *ListNode) *ListNode {
+    var prev *ListNode	// 定义节点，用于存储节点的前一节点的引用
+    curr := head
+    
+    for curr != nil {
+        next := curr.Next	//  存储下一个节点
+        curr.Next = prev	// 指向前一个节点
+        prev = curr 	// 赋值上一个节点，继续下一个节点
+        curr = next	// 继续下一个节点
+    }
+}
+```
+
+
+
+## [21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists)
+
+* 链表1，2都不为空
+* 判断那个链表的头节点值更小，将较小的值添加到结果，之后将链表的节点向后移一位
+* 需要一个虚拟头节点，操作一次，向后移动一个节点
+
+循环终止时，链表1，2至多有一个是非空，由于是有序的，可以直接将链表合并在上面处理的结果后面
+
+```go
+type ListNode struct {
+    Val		int
+    Next 	*ListNode
+}
+
+func mergeTwoLists(l1, l2 *ListNode) *ListNode {
+    preHead := &ListNode{}	// 创建一个虚拟头节点
+    
+    prev := preHead		// 以指针的形式操作
+    for l1 !=nil && l2 != nil {		// 链表1，2都不为空
+        if l1.Val <= l2.Val {
+            prev.Next = l1		// 当其中一个链表的值较小时，指向此链表中的节点
+            l1 = l1.Next		// 向后移动一个节点
+        } else {
+            prev.Next = l2
+            l2 = l2.Next
+        }
+        prev = prev.Next		// 指针要随着链表的节点移动而移动
+    }
+    // 结束后，之多还有一个非空链表，将它拼接在后面
+    if l1 != nil {
+        prev.Next = l1
+    } else {
+        prev.Next = l2
+    }
+   
+	return preHead.Next
+}
+
+```
+
+
+
+## [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
+
+```go
+type ListNode struct {
+    Val		int
+    Next 	*ListNode
+}
+
+func deleteDuplicates(head *ListNode) *ListNode {
+
+	if head == nil {
+		return nil
+	}
+
+	prev := head		// 建立指针
+
+	for prev.Next != nil {
+		if prev.Next.Val == prev.Val {
+			prev.Next = prev.Next.Next
+		} else {
+			prev = prev.Next
+		}
+	}
+	return head
+}
+```
+
+# 递归
+
+[21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists)
+
+* 首先的找到终止条件（一开始为空或者当一个链表为空时）
+* 判断哪个节点的值小，然后递归的判断指向的下一个节点哪个较小
+
+```
+type ListNode struct {
+    Val		int
+    Next 	*ListNode
+}
+
+func mergeTwoLists(l1, l2 *ListNode) *ListNode {
+	if l1 == nil {			// 终止条件
+		return l2
+	}
+	if l2 == nil {
+		return l1
+	}
+	
+	if l1.Val < l2.Val {		// 判断哪个节点的值小
+		l1.Next = mergeTwoLists(l1.Next, l2)	// 递归的去寻找l1下一个节点，与l2的节点那个小
+		return l1
+	} else {
+		l2.Next = mergeTwoLists(l1, l2.Next)	// 递归的去寻找l2下一个节点，与l1的节点那个小
+		return l2
+	}
+}
+```
+
+
 
