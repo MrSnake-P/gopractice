@@ -112,7 +112,29 @@ func getIntersectionNode(headA, headB *ListNode) *ListNode {
 }
 ```
 
+## [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/)
 
+* 将链表赋值到数组中
+* 通过双指针，从两端向中间移动，比较值是否相等
+
+```go
+func isPalindrome(head *ListNode) bool {
+   var array []int
+
+   for ; head != nil; head = head.Next {
+      array = append(array, head.Val)
+   }
+
+   n := len(array)
+   for i, v := range array[:n/2] {
+      if v != array[n-i-1] {
+         return false
+      }
+   }
+
+   return true
+}
+```
 
 # 迭代
 
@@ -209,7 +231,7 @@ func deleteDuplicates(head *ListNode) *ListNode {
 
 # 递归
 
-[21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists)
+## [21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists)
 
 * 首先的找到终止条件（一开始为空或者当一个链表为空时）
 * 判断哪个节点的值小，然后递归的判断指向的下一个节点哪个较小
