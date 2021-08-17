@@ -1,7 +1,6 @@
 package main
 
 import "fmt"
-
 type MyCircularQueue struct {
 	queue     []int // 固定大小的数组，用于保存元素
 	headIndex int   // 队首的索引
@@ -70,4 +69,5 @@ func main() {
 	fmt.Println(queue)
 	queue.DeQueue()
 	fmt.Println(queue)
+
 }
