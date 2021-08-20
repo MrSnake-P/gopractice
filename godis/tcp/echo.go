@@ -9,12 +9,17 @@ import (
 	"io"
 	"net"
 	"sync"
+	"time"
 )
 
 type Client struct {
 	Conn net.Conn
 
 	Waiting wait.Wait
+}
+
+func MakeEchoHandler() *EchoHandler {
+	return &EchoHandler{}
 }
 
 type EchoHandler struct {
@@ -27,7 +32,7 @@ type EchoHandler struct {
 	closing    atomic.Boolean
 }
 
-func (h *EchoHandler) Handler (ctx context.Context, conn net.Conn) {
+func (h *EchoHandler) Handle (ctx context.Context, conn net.Conn) {
 	// 关闭中的handler不会处理新连接
 	if h.closing.Get() {
 		conn.Close()
@@ -50,7 +55,36 @@ func (h *EchoHandler) Handler (ctx context.Context, conn net.Conn) {
 			}
 			return
 		}
-		//
+		// 发送数据先置为waiting状态，阻止连接被关闭
+		client.Waiting.Add(1)
 
+		// 模拟关闭时未完成发送的情况
+		//logger.Info("sleeping")
+		//time.Sleep(10 * time.Second)
+		b := []byte(msg)
+		conn.Write(b)
+		// 发送完毕
+		client.Waiting.Done()
 	}
+}
+
+// 关闭客户端连接
+func (c *Client) Close() error {
+	// 等待数据发送完成或超时
+	c.Waiting.WaitWithTimeOut(10 * time.Second)
+	c.Conn.Close()
+	return nil
+}
+
+// 关闭服务器
+func (h *EchoHandler) Close() error {
+	logger.Info("handler shtting down...")
+	h.closing.Set(true)
+	// 逐个关闭
+	h.activeConn.Range(func(key interface{}, val interface{})bool{
+		client := key.(*Client)
+		client.Close()
+		return true
+	})
+	return nil
 }
